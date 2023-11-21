@@ -113,60 +113,29 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def do_create(self, arg):
-        """ Create an object of any class with given parameters"""
-        if not arg:
+    def do_create(self, args):
+        """ Create an object of any class"""
+        try:
+            if not args:
+                raise SyntaxError()
+            split1 = args.split(' ')
+            new_instance = eval('{}()'.format(split1[0]))
+            params = split1[1:]
+            for param in params:
+                k, v = param.split('=')
+                try:
+                    attribute = HBNBCommand.verify_attribute(v)
+                except:
+                    continue
+                if not attribute:
+                    continue
+                setattr(new_instance, k, attribute)
+            new_instance.save()
+            print(new_instance.id)
+        except SyntaxError:
             print("** class name missing **")
-            return
-
-        # Split the arguments to get class name and parameters
-        args_list = shlex.split(arg)
-        class_name = args_list[0]
-
-        if class_name not in HBNBCommand.classes:
+        except NameError as e:
             print("** class doesn't exist **")
-            return
-
-        # Remove class name from the arguments
-        args_list = args_list[1:]
-
-        # Parse parameters
-        params = {}
-        for arg in args_list:
-            # Split key-value pairs
-            key, value = arg.split("=")
-
-            # Handle string values
-            if value.startswith('"') and value.endswith('"'):
-                value = value[1:-1].replace('_', ' ').replace('\\"', '"')
-
-            # Handle float values
-            elif '.' in value:
-                try:
-                    value = float(value)
-                except ValueError:
-                    print(f"Invalid value for parameter {key}: {value}")
-                    return
-
-            # Handle integer values
-            else:
-                try:
-                    value = int(value)
-                except ValueError:
-                    print(f"Invalid value for parameter {key}: {value}")
-                    return
-
-            # Add parameter to the dictionary
-            params[key] = value
-
-        # Create an instance of the specified class with the given parameters
-        new_instance = HBNBCommand.classes[class_name](**params)
-
-        # Save the instance and print its id
-        storage.save()
-        print(new_instance.id)
-        storage.save()
-
 
     def help_create(self):
         """ Help information for the create method """
