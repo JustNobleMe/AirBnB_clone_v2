@@ -56,7 +56,7 @@ class BaseModel:
         dictionary['updated_at'] = self.updated_at.isoformat()
         return dictionary
 
-        def delete(self):
+    def delete(self):
             """Delete the current instance from the story by calling the method delete"""
             from models import storage
             storage.delete(self)
