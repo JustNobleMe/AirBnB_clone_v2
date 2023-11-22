@@ -41,7 +41,7 @@ class HBNBCommand(cmd.Cmd):
         if not ('.' in line and
                 '(' in line and
                 ')' in line):
-                    return line
+                return line
 
         try:
             pline = line[:]
@@ -56,7 +56,8 @@ class HBNBCommand(cmd.Cmd):
                 _id = pline[0].replace('\"', '')
                 pline = pline[2].strip()
                 if pline:
-                    if pline[0] == '{' and pline[-1] == '}' and type(eval(pline)) is dict:
+                    if pline[0] == '{' and pline[-1] == '}' 
+                    and type(eval(pline)) is dict:
                         _args = pline
                     else:
                         _args = pline.replace(',', '')
