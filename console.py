@@ -210,18 +210,20 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
-        obj = storage.all()
         if args:
             args = args.split(' ')[0]  # remove possible trailing args
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in obj.items():
-                if k.split('.')[0] == args:
-                    print(v)
+            # Use the appropriate SQLAlchemy query
+            objects = storage._DBStorage__session.query(HBNBCommand.classes[args]).all()
+            for obj in objects:
+                print(obj)
         else:
-            for k, v in obj.items():
-                print(v)
+            # Use the appropriate SQLAlchemy query
+            objects = storage._DBStorage__session.query(*HBNBCommand.classes.values()).all()
+            for obj in objects:
+                print(obj)
 
     def help_all(self):
         """ Help information for the all command """
