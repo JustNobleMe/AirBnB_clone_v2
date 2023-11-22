@@ -38,8 +38,10 @@ class HBNBCommand(cmd.Cmd):
         """Reformat command line for advanced command syntax."""
         _cmd = _cls = _id = _args = ''
 
-        if not ('.' in line and '(' in line and ')' in line):
-            return line
+        if not ('.' in line and
+                '(' in line and
+                ')' in line):
+                    return line
 
         try:
             pline = line[:]
